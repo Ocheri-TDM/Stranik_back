@@ -1,0 +1,162 @@
+{% extends 'header.html' %}
+
+{% block title %}Location{% endblock %}
+
+{% block content %}
+{% load static %}
+    <section class="historylinks">
+        <div class="container">
+            <div class="historylinks__container">
+                <div class="historylink">
+                    <a class="link" href="../index.html">Главная</a>
+                    <img src="{% static 'images/icon/arrowLink.png' %}" alt="arrowLink">
+                </div>
+
+                <div class="historylink">
+                    <a class="link active" href="locationsPage.html">Какая-то либо локация</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="products">
+        <div class="container">
+            <div class="products__container">
+                <div class="products__aside">
+                    <div class="filters">
+                        <div class="filters__header">
+                          <span class="filters__title">Фильтры</span>
+                          <button class="filters__icon-button">
+                            <img class="filters__icon" src="{% static 'images/icon/icon-path.svg' %}" alt="Иконка фильтра">
+                          </button>
+                        </div>
+                        <div class="filters__categories">
+                          <button class="filters__category-button">Какая-то либо локация</button>
+                          <button class="filters__category-button">Какая-то либо локация</button>
+                          <button class="filters__category-button">Какая-то либо локация</button>
+                          <button class="filters__category-button">Какая-то либо локация</button>
+                          <button class="filters__category-button">Какая-то либо локация</button>
+                        </div>
+                        <div class="filters__price">
+                            <span class="filters__price-label">Цена</span>
+                            <div class="filters__price-range">
+                              <input
+                                class="filters__price-slider"
+                                type="range"
+                                id="min-price"
+                                min="300"
+                                max="10000"
+                                value="300"
+                              />
+                              <input
+                                class="filters__price-slider"
+                                type="range"
+                                id="max-price"
+                                min="50"
+                                max="10000"
+                                value="10000"
+                              />
+                              <div class="filters__price-highlight"></div>
+                            </div>
+                            <div class="filters__price-values">
+                              <span class="filters__price-value" id="price-min">$50</span>
+                              <span class="filters__price-value" id="price-max">$200</span>
+                            </div>
+                          </div>
+                        <div class="filters__apply-button">
+                            <button class="filters__apply-btn">Применить фильтр</button>
+                        </div>
+                      </div>
+                </div>
+
+                <div class="products__main">
+                    <div class="products-top">
+                        <span class="products__title">Какая-то либо услуга</span>
+                        <div class="products-sorting">
+                            <span class="products-sorting-text">Сортировать по:</span>
+                            
+                            <div class="products-sorting-btn">
+                                {% if sort_option == "pop" %}
+                                    Самые популярные
+                                {% elif sort_option == "price_asc" %}
+                                    По цене (возрастание)
+                                {% elif sort_option == "price_desc" %}
+                                    По цене (убывание)
+                                {% else %}
+                                    Самые популярные
+                                {% endif %}
+                                <img class="products-sorting-img" src="{% static 'images/icon/dropdown.svg' %}" alt="Dropdown">
+                            </div>
+                        
+                            <ul class="products-sorting-menu">
+                                <li class="products-sorting-item">
+                                    <a class="link products-sorting-item"href="?sort=pop">Самые популярные</a>
+                                </li>
+                                <li class="products-sorting-item">
+                                    <a class="link products-sorting-item"href="?sort=price_asc">По цене (возрастание)</a>
+                                </li>
+                                <li class="products-sorting-item">
+                                    <a class="link products-sorting-item"href="?sort=price_desc">По цене (убывание)</a>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        
+                    </div>
+
+                    <div class="catalog__blocks">
+                        {% include 'catalog/catalog_content.html' %}
+                    </div>
+
+                    <nav class="pagination">
+                    {% include 'catalog/pagination.html' %}
+                    </nav>
+                    
+                    
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        function sortRents(sortType) {
+            const url = new URL(window.location.href);
+            url.searchParams.set("sort", sortType);
+            window.location.href = url.toString();
+        }
+    </script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const paginationContainer = document.querySelector(".pagination");
+    
+        if (paginationContainer) {
+            paginationContainer.addEventListener("click", function (event) {
+                if (event.target.tagName === "A") {
+                    event.preventDefault(); 
+    
+                    let url = new URL(event.target.href);
+    
+                    let currentParams = new URLSearchParams(window.location.search);
+                    currentParams.forEach((value, key) => {
+                        if (!url.searchParams.has(key)) {
+                            url.searchParams.set(key, value);
+                        }
+                    });
+    
+                    fetch(url.toString(), {
+                        headers: { "X-Requested-With": "XMLHttpRequest" }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        document.querySelector(".catalog__blocks").innerHTML = data.html;
+                        document.querySelector(".pagination").innerHTML = data.pagination; 
+                        history.pushState(null, "", url.toString()); 
+                    })
+                    .catch(error => console.error("Ошибка при загрузке страниц:", error));
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}

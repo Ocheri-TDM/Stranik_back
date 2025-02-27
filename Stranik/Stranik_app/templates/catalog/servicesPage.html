@@ -1,0 +1,180 @@
+{% extends 'header.html' %}
+
+{% block title %}Главная страница{% endblock %}
+
+{% block content %}
+{% load static %}
+    <section class="historylinks">
+        <div class="container">
+            <div class="historylinks__container">
+                <div class="historylink">
+                    <a class="link" href="{% url 'index' %}">Главная</a>
+                    <img src="{% static 'images/icon/arrowLink.png' %}" alt="arrowLink">
+                </div>
+
+                <div class="historylink">
+                    <a class="link active" href="{% url 'servicesPageRent' %}">Какая-то либо услуга</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="products">
+        <div class="container">
+            <div class="products__container">
+                <div class="products__aside">
+                    <div class="filters">
+                        <div class="filters__header">
+                          <span class="filters__title">Фильтры</span>
+                          <button class="filters__icon-button">
+                            <img class="filters__icon" src="{% static 'images/icon/icon-path.svg' %}" alt="Иконка фильтра">
+                          </button>
+                        </div>
+                        <div class="filters__categories">
+                          <button class="filters__category-button">Какая-то либо услуга</button>
+                          <button class="filters__category-button">Какая-то либо услуга</button>
+                          <button class="filters__category-button">Какая-то либо услуга</button>
+                          <button class="filters__category-button">Какая-то либо услуга</button>
+                          <button class="filters__category-button">Какая-то либо услуга</button>
+                        </div>
+                        {% include "dinamic_sort/filters.html" %}
+                      </div>
+                </div>
+
+                <div class="products__main">
+                    <div class="products-top">
+                        <span class="products__title">Какая-то либо услуга</span>
+                        <div class="products-sorting">
+                            <span class="products-sorting-text">Сортировать по:</span>
+                            
+                            <div class="products-sorting-btn">
+                                {% if sort_option == "pop" %}
+                                    Самые популярные
+                                {% elif sort_option == "price_asc" %}
+                                    По цене (возрастание)
+                                {% elif sort_option == "price_desc" %}
+                                    По цене (убывание)
+                                {% else %}
+                                    Самые популярные
+                                {% endif %}
+                                <img class="products-sorting-img" src="{% static 'images/icon/dropdown.svg' %}" alt="Dropdown">
+                            </div>
+                        
+                            <ul class="products-sorting-menu">
+                                <li class="products-sorting-item">
+                                    <a class="link products-sorting-item"href="?sort=pop">Самые популярные</a>
+                                </li>
+                                <li class="products-sorting-item">
+                                    <a class="link products-sorting-item"href="?sort=price_asc">По цене (возрастание)</a>
+                                </li>
+                                <li class="products-sorting-item">
+                                    <a class="link products-sorting-item"href="?sort=price_desc">По цене (убывание)</a>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        
+                    </div>
+
+                    <div id="catalog-container" class="catalog__blocks">
+                        {% include 'dinamic_sort/catalog_content.html' %}
+                    </div>
+
+                    <nav class="pagination">
+                    {% include 'dinamic_sort/pagination.html' %}
+                    </nav>
+                    
+                </div>
+            </div>
+        </div>
+    </section>
+     
+    <script>
+        function sortRents(sortType) {
+            const url = new URL(window.location.href);
+            url.searchParams.set("sort", sortType);
+            window.location.href = url.toString();
+        }
+    </script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    function updateCatalog(url) {
+        fetch(url, { headers: { "X-Requested-With": "XMLHttpRequest" } })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("catalog-container").innerHTML = data.html;
+                document.querySelector(".pagination").innerHTML = data.pagination;
+            })
+            .catch(error => console.error("Ошибка:", error));
+    }
+
+    document.getElementById("apply-filters").addEventListener("click", function () {
+        let minPrice = document.getElementById("min-price").value;
+        let maxPrice = document.getElementById("max-price").value;
+        let sortOption = document.querySelector(".products-sorting-btn").dataset.sort;
+
+        let url = new URL(window.location.href);
+        url.searchParams.set("min_price", minPrice);
+        url.searchParams.set("max_price", maxPrice);
+        url.searchParams.set("sort", sortOption);
+        url.searchParams.set("page", 1); 
+
+        updateCatalog(url.toString());
+    });
+
+    document.querySelector(".pagination").addEventListener("click", function (event) {
+        if (event.target.tagName === "A") {
+            event.preventDefault();
+            let url = new URL(event.target.href);
+
+            let minPrice = document.getElementById("min-price").value;
+            let maxPrice = document.getElementById("max-price").value;
+            let sortOption = document.querySelector(".products-sorting-btn").dataset.sort;
+
+            if (minPrice) url.searchParams.set("min_price", minPrice);
+            if (maxPrice) url.searchParams.set("max_price", maxPrice);
+            if (sortOption) url.searchParams.set("sort", sortOption);
+
+            updateCatalog(url.toString());
+        }
+    });
+
+    document.querySelectorAll(".products-sorting-item a").forEach(item => {
+        item.addEventListener("click", function (event) {
+            event.preventDefault();
+            let sortValue = this.getAttribute("href").split("=")[1];
+            let sortText = this.textContent;
+
+            let sortingBtn = document.querySelector(".products-sorting-btn");
+            sortingBtn.dataset.sort = sortValue;
+            sortingBtn.innerHTML = sortText + ' <img class="products-sorting-img" src="/static/images/icon/dropdown.svg" alt="Dropdown">';
+
+            let minPrice = document.getElementById("min-price").value;
+            let maxPrice = document.getElementById("max-price").value;
+
+            let url = new URL(window.location.href);
+            url.searchParams.set("min_price", minPrice);
+            url.searchParams.set("max_price", maxPrice);
+            url.searchParams.set("sort", sortValue);
+            url.searchParams.set("page", 1); 
+
+            updateCatalog(url.toString());
+        });
+    });
+});
+
+</script>
+<script>
+document.querySelectorAll(".pagination__button").forEach(button => {
+    button.addEventListener("click", function (event) {
+        if (event.target.tagName.toLowerCase() === "svg" || event.target.tagName.toLowerCase() === "path") {
+            event.preventDefault();
+            this.click();
+        }
+    });
+});
+
+  </script>
+
+{% endblock %}

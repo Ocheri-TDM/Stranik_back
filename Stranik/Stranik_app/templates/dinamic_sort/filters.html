@@ -1,0 +1,22 @@
+<div class="filters__price">
+    <span class="filters__price-label">Цена</span>
+    <div class="filters__price-range">
+      <input class="filters__price-slider" type="range" id="min-price" min="300" max="30000" value="{{ request.GET.max_price|default:300 }}"/>
+      <input
+        class="filters__price-slider"
+        type="range"
+        id="max-price"
+        min="50"
+        max="30000"
+        value="{{ request.GET.max_price|default:30000 }}"
+      />
+      <div class="filters__price-highlight"></div>
+    </div>
+    <div class="filters__price-values">
+      <span class="filters__price-value" id="price-min">$50</span>
+      <span class="filters__price-value" id="price-max">$200</span>
+    </div>
+  </div>
+<div class="filters__apply-button">
+    <button class="filters__apply-btn" id="apply-filters">Применить фильтр</button>
+</div>

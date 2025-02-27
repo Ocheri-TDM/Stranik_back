@@ -1,0 +1,54 @@
+{% extends 'header.html' %}
+
+{% block title %}Вход{% endblock %}
+
+{% block content %}
+{% load static %}
+
+    <section class="historylinks">
+        <div class="container">
+            <div class="historylinks__container">
+                <div class="historylink">
+                    <a class="link" href="{% url 'index' %}">Главная</a>
+                    <img src="{% static 'images/icon/arrowLink.png' %}" alt="arrowLink">
+                </div>
+
+                <div class="historylink">
+                    <a class="link active" href="{% url 'login' %}">Вход</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="forms">
+        <div class="container">
+            <div class="form__container">
+                <div class="form__headlines">
+                    <p class="headlines__name">Вход</p>
+                </div>
+
+                <form class="form" action="/login" method="POST">
+                    <div class="form__input">
+                        <input type="text" id="gmail" name="gmail" placeholder="Электронная почта" required>
+                    </div>
+
+                    <div class="form__input">
+                        <input type="password" id="password" name="password" placeholder="Пароль" required>
+                        <button type="button" class="password-toggle" onclick="toggleBothPasswords(this)">
+                            <img src="{% static 'images/icon/eye-icon.svg' %}" alt="Показать пароль">
+                        </button>
+                    </div>
+
+                    <div class="form__button">
+                        <button class="form-btn" type="submit">Вход</button>
+                    </div>
+                </form>
+
+                <div class="form__description">
+                    <p>У вас нет учетной записи?<a class="link" href="{% url 'signUp' %}"> Зарегистрироваться</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

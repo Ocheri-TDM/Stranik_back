@@ -1,0 +1,36 @@
+{% extends 'header.html' %}
+
+{% block title %}Detail{% endblock %}
+
+{% block content %}
+{% load static %}
+    <section class="historylinks">
+        <div class="container">
+            <div class="historylinks__container">
+                <div class="historylink">
+                    <a class="link" href="{% url 'index' %}">Главная</a>
+                    <img src="{% static 'images/icon/arrowLink.png' %}" alt="arrowLink">
+                </div>
+
+                <div class="historylink">
+                    <a class="link" href="{% url 'servicesPageRent' %}">Какая-то либо услуга</a>
+                    <img src="{% static 'images/icon/arrowLink.png' %}" alt="arrowLink">
+                </div>
+
+                <div class="historylink">
+                    <a class="link active" href="{% url 'servicesDetailPage' %}">Услуга</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="servicesDetail">
+        <div class="container">
+            
+        </div>
+    </section>
+
+    <section>
+        
+    </section>
+{% endblock %}

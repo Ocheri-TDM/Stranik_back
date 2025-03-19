@@ -1,9 +1,11 @@
 {% extends 'header.html' %}
 
-{% block title %}Detail{% endblock %}
+{% block title %}Главная страница{% endblock %}
 
 {% block content %}
 {% load static %}
+<link rel="stylesheet" href="{% static 'styles/variables.css' %}">
+<link rel="stylesheet" href="{% static 'styles/catalogdetail.css' %}">
     <section class="historylinks">
         <div class="container">
             <div class="historylinks__container">
@@ -18,7 +20,7 @@
                 </div>
 
                 <div class="historylink">
-                    <a class="link active" href="{% url 'servicesDetailPage' %}">Услуга</a>
+                    <a class="link active" href="servicesDetailPage.html">Услуга</a>
                 </div>
             </div>
         </div>
@@ -26,11 +28,131 @@
 
     <section class="servicesDetail">
         <div class="container">
+        <div class="container1">
+            <div class="gallery">
+                <div class="thumbnails">
+                    {% for image in additional_images %}
+                        <img class="thumbnail" src="{{ image.image.url }}" alt="{{ forloop.counter }}" data-index="{{ forloop.counter }}">
+                    {% endfor %}
+                </div>
+
+
+                <img id="mainPhoto" src="{{ main_image.image.url }}" alt="Основное фото" data-index="0">
+            </div>
+            <div class="info">
+                <h1>{{ rent.title }}</h1>
+                <div class="rating">
+                    <div class="rating-stars">
+                        {% for _ in full_stars %}
+                            <img src="{% static 'images/Star 1.svg' %}" alt="Полная звезда">
+                        {% endfor %}
+
+                        {% if half_star %}
+                            <img src="{% static 'images/StarHalf.svg' %}" alt="Половина звезды">
+                        {% endif %}
+                    </div>
+                    <span class="ratingN">{{ rent.pop }}/5</span>
+                </div>
+                <p class="price">${{ rent.cost_value }}</p>
+                <p class="description">{{ rent.text }}</p>
+            </div>
+        </div>
+    
+            <div class="tabs">
+                <button class="tab active" data-tab="info">Подробная информация</button>
+                <button class="tab" data-tab="reviews">Рейтинг и отзывы</button>
+            </div>
             
+            <div id="info" class="tab-content active info-active">
+                <p>Подробная информация об услуге...</p>
+            </div>
+            
+            <div id="reviews" class="tab-content rewiews-active">
+                <h2 class="black">Все отзывы <span class="gray">(451)</span></h2>
+                <button class="leave-review">Оставить отзыв</button>
+                <div class="review-list">
+                    
+                    <div class="review">
+                        <div class="review-in">
+                            <div class="review-space">
+                                <img src="{% static '../static/images/Star 1.svg' %}">
+                                <img src="{% static '../static/images/Star 1.svg' %}">
+                                <img src="{% static '../static/images/Star 1.svg' %}">
+                                <img src="{% static '../static/images/Star 1.svg' %}">
+                                <img src="{% static '../static/images/StarHalf.svg' %}">
+                            </div>
+
+                            <div class="review-author review-space">
+                                <h3 >Samantha D.</h3>
+                                 <img src="{% static '../static/images/icon/Frame.svg' %}">
+                            </div>
+                            
+                            <p class="review-space">"I absolutely love this t-shirt! The design is unique and the fabric feels so comfortable..."</p>
+
+                            <p>Posted on August 14, 2023</p>
+                        </div>
+                    </div>                    
+                    
+                </div>
+                <button class="leave-review">Загрузить больше отзывов</button>
+            </div>
         </div>
     </section>
 
-    <section>
-        
-    </section>
+<script src="../scripts/script.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const mainPhoto = document.getElementById("mainPhoto");
+        const thumbnailsContainer = document.querySelector(".thumbnails");
+
+        function updateThumbnailsOrder() {
+            let thumbnails = Array.from(thumbnailsContainer.children);
+            thumbnails.sort((a, b) => a.dataset.index - b.dataset.index);
+            thumbnailsContainer.innerHTML = "";
+            thumbnails.forEach(thumbnail => thumbnailsContainer.appendChild(thumbnail));
+        }
+
+        document.querySelectorAll(".thumbnail").forEach(thumbnail => {
+            thumbnail.addEventListener("click", function () {
+                let tempSrc = mainPhoto.src;
+                let tempAlt = mainPhoto.alt;
+                let tempIndex = mainPhoto.dataset.index;
+
+                mainPhoto.src = this.src;
+                mainPhoto.alt = this.alt;
+                mainPhoto.dataset.index = this.dataset.index;
+
+                this.src = tempSrc;
+                this.alt = tempAlt;
+                this.dataset.index = tempIndex;
+
+                updateThumbnailsOrder();
+            });
+        });
+    });
+
+// это только фотки:)ЗЗЗ
+
+
+document.addEventListener("DOMContentLoaded", function () {
+        const tabs = document.querySelectorAll(".tab");
+        const contents = document.querySelectorAll(".tab-content");
+
+        tabs.forEach(tab => {
+            tab.addEventListener("click", function () {
+                // Убираем активность у всех кнопок и контента
+                tabs.forEach(t => t.classList.remove("active"));
+                contents.forEach(c => c.classList.remove("active"));
+
+                // Добавляем активный класс к нажатой кнопке
+                this.classList.add("active");
+
+                // Отображаем соответствующий контент
+                const tabId = this.getAttribute("data-tab");
+                document.getElementById(tabId).classList.add("active");
+            });
+        });
+    });
+</script>
+
 {% endblock %}

@@ -1,7 +1,11 @@
     {% for rent in page_obj %}
         <div class="catalog__block">
-            <a href="{% url 'servicesDetailPage' %}" class="link">
-            <img src="{{ rent.image.url }}" alt="T-Shirt">
+            <a href="{% url 'servicesDetailPage' rent.id %}" class="link">
+            {% if rent.images.exists %}
+                <img src="{{ rent.images.first.image.url }}" alt="{{ rent.title }}">
+            {% else %}
+                <img src="/static/default.jpg" alt="Нет изображения">
+            {% endif %}
                 <div class="block__info">
                     <span class="block__info-name">{{ rent.title }}</span>
                     <div class="block__info-grade">Оценка: {{ rent.pop }}/5 </div>

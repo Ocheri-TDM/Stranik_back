@@ -1,15 +1,21 @@
 from django.shortcuts import render,  get_object_or_404, redirect
-from .models import Rent, Category
+from .models import Rent
 from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 import json
 
 def index(request):
-    rent = Rent.objects.order_by('-date')[:4]
+    rents = Rent.objects.order_by('-date')[:4]
+    
+    rent_images = {
+        rent.id: rent.images.filter(is_main=True).first()
+        for rent in rents
+    }
 
-    context={
-        'rents': rent 
+    context = {
+        'rents': rents,
+        'rent_images': rent_images,
     }
 
     return render(request, "index.html", context)
@@ -208,6 +214,26 @@ def locationPageStudio(request):
 #----------------------------------------------------------------- end location
 
 
+def rent_detail(request, rent_id):
+    rent = get_object_or_404(Rent, id=rent_id)
+    images = rent.images.all()
+    main_image = images.filter(is_main=True).first() 
+    additional_images = images.exclude(is_main=True)[:4] 
 
-def servicesDetailPage(request):
-    return render(request, "catalog/servicesDetailPage.html")
+    rating = round(rent.pop, 1) 
+
+    full_stars = int(rating) 
+    half_star = 1 if rating - full_stars >= 0.5 else 0
+
+    return render(request, "catalog/servicesDetailPage.html", {
+        "rent": rent,
+        "main_image": main_image,
+        "additional_images": additional_images,
+        "full_stars": range(full_stars),
+        "half_star": half_star,
+    })
+
+
+
+#------------------------------------------------------------------- search
+

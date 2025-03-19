@@ -19,12 +19,10 @@
 
     {% if page_obj.has_next %}
         <a href="?page={{ page_obj.next_page_number }}&{{ request.GET.urlencode }}" class="pagination__button pagination__button--next link">
-            Следующий
-            <span class="pagination__icon-wrapper">
+                 Следующий
             <svg class="pagination__icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M4.16602 9.99984H15.8327M15.8327 9.99984L9.99935 4.1665M15.8327 9.99984L9.99935 15.8332" stroke="black" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
-            </span>
         </a>
     {% endif %}
 

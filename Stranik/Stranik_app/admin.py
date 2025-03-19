@@ -1,5 +1,12 @@
 from django.contrib import admin
-from .models import Category, Rent
+from .models import Category, Rent, RentImage
 
 admin.site.register(Category)
-admin.site.register(Rent)
+class RentImageInline(admin.TabularInline):
+    model = RentImage
+    extra = 1
+
+@admin.register(Rent)
+class RentAdmin(admin.ModelAdmin):
+    inlines = [RentImageInline]
+

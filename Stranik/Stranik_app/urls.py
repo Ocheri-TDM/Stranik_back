@@ -19,6 +19,6 @@ urlpatterns = [
     path('location/studio', views.locationPageStudio, name='locationPageStudio'),
     path("filter_rents/", filter_rents, name="filter_rents"),
 
-    path('service/rent/detail/pk', views.servicesDetailPage, name='servicesDetailPage'),
-    path('service/movie/detail/pk', views.servicesDetailPage, name='servicesDetailPage'),
+    path('service/rent/detail/<int:rent_id>/', views.rent_detail, name='servicesDetailPage'),
+    # path('service/movie/detail/<int:rent_id>/', views.servicesDetailPage, name='servicesDetailPage'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

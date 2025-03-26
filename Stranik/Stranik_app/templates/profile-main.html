@@ -1,0 +1,516 @@
+{% extends 'header.html' %}
+
+{% block title %}Профиль{% endblock %}
+
+{% block content %}
+{% load static %}
+    <section class="historylinks">
+        <div class="container">
+            <div class="historylinks__container">
+                <div class="historylink">
+                    <a class="link" href="{% url 'index' %}">Главная</a>
+                    <img src="{% static './images/icon/arrowLink.png' %}" alt="arrowLink">
+                </div>
+
+                <div class="historylink">
+                    <a class="link active" href="{% url 'profile' %}">Личный Кабинет</a>
+                    <img src="{% static './images/icon/arrowLink.png' %}" alt="arrowLink">
+                </div>
+
+                <div class="historylink">
+                    <a class="link active" href="{% url 'profile' %}">История</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="gap">
+        <div class="container sidebarcon">
+            <aside class="sidebar">
+                <div>
+                    <h3>Навигация</h3>
+                </div>
+                <div>
+                    <ul>
+                        <li class="active"><img src="{% static './images/icon/dashboardblack.svg' %}" class="icon"> Панель инструментов </li>
+                        <li><img src="{% static './images/icon/history.svg' %}" class="icon"> История </li>
+                        <li><img src="{% static './images/icon/favourites.svg' %}" class="icon"> Избранное </li>
+                        <li id="settingsTab"><img src="{% static './images/icon/settings.svg' %}" class="icon"> Настройки </li>
+                        <li><img src="{% static 'images/icon/outsystem.svg' %}" class="icon"><a style="text-decoration: none; color: #6c757d;" href="{% url 'logout' %}">Выход из системы</a></li>
+                    </ul>
+                </div>
+            </aside>
+            <!-- Панель инструментов -->
+            <section class="profile content">
+                <div>
+                    {% if user_profile.profile_picture %}
+                        <img src="{{ user_profile.profile_picture.url }}" alt="Фото профиля">
+                    {% else %}
+                        <img src="{% static './images/icon/default-avatar.jpg' %}" alt="Фото профиля">
+                    {% endif %}
+                </div>
+                
+                <h3>{{ request.user.first_name }} {{ request.user.last_name }}</h3>
+                
+                <p>Арендодатель оборудования</p>
+                <a href="#" id="editProfileBtn">Редактировать профиль</a>
+
+            </section>
+
+            <div class="banner-div">
+                <button class="banner-btn-ads">Добавить объявление</button>
+            </div>
+            
+
+            <section class="ads">
+                    <h3>Мои объявления</h3>
+                    <table class="table-ads">
+                        <thead>
+                            <tr>
+                                <th>НАЗВАНИЕ</th>
+                                <th>ДАТА</th>
+                                <th>ЦЕНА</th>
+                                <th>СТАТУС</th>
+                                <th>УПРАВЛЕНИЕ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#Sony a100</td>
+                                <td>8 Sep, 2020</td>
+                                <td><b>$500.00</b> (Кол-во 5шт)</td>
+                                <td>Активный</td>
+                                <td><span class="edit">Редактировать</span> <span class="delete">Удалить</span></td>
+                            </tr>
+                            <tr>
+                                <td>#Lumix g80</td>
+                                <td>8 Sep, 2020</td>
+                                <td><b>$600.00</b> (Кол-во 1шт)</td>
+                                <td>Завершенный</td>
+                                <td><span class="edit">Редактировать</span> <span class="delete">Удалить</span></td>
+                            </tr>
+                            <tr>
+                                <td>#Стадикам g-log</td>
+                                <td>8 Sep, 2020</td>
+                                <td><b>$200.00</b> (Кол-во 3шт)</td>
+                                <td>Активный</td>
+                                <td><span class="edit">Редактировать</span> <span class="delete">Удалить</span></td>
+                            </tr>
+                            <tr>
+                                <td>#Петличка rode</td>
+                                <td>8 Sep, 2020</td>
+                                <td><b>$50.00</b> (Кол-во 12шт)</td>
+                                <td>Активный</td>
+                                <td><span class="edit">Редактировать</span> <span class="delete">Удалить</span></td>
+                            </tr>
+                            <tr>
+                                <td>#Объектив sony</td>
+                                <td>8 Sep, 2020</td>
+                                <td><b>$345.00</b> (Кол-во 6шт)</td>
+                                <td>Завершенный</td>
+                                <td><span class="edit">Редактировать</span> <span class="delete">Удалить</span></td>
+                            </tr>
+                            <tr>
+                                <td>#Жилет</td>
+                                <td>8 Sep, 2020</td>
+                                <td><b>$135.00</b> (Кол-во 8шт)</td>
+                                <td>Активный</td>
+                                <td><span class="edit">Редактировать</span> <span class="delete">Удалить</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+            </section>
+            <!-- История -->
+
+
+            <section  style="display: none;" class="ads-history">
+                    <h3>История</h3>
+                    {% if viewed_rents %}
+                    <table class="table-history">
+                        <thead>
+                            <tr>
+                                <th>Название</th>
+                                <th>Дата</th>
+                                <th>Цена</th>
+                                <th>Управление</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% include 'dinamic_sort/history_content.html' %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p>История просмотров пуста.</p>
+                {% endif %}
+
+                    <nav class="pagination">
+                        <div id="pagination-container">
+                            {% include 'dinamic_sort/pagination.html' %}
+                        </div>
+                    </nav>
+            </section>
+            <!-- Избранное -->
+
+
+            <section style="display: none;" class="history-block">
+                <div class="products__main">               
+                    <div class="catalog__blocks">
+
+                        <div class="catalog__block">
+                            <a href="servicesDetailPage.html" class="link">
+                            <img src="../images/skeleton1.png" alt="T-Shirt">
+                            <div class="block__info">
+                                <span class="block__info-name">Название</span>
+                                <div class="block__info-grade">Оценка: 5/5</div>
+                                <div class="block__info-bottom">
+                                    <span class="block__info-price">500$</span>
+                                    <div class="favorites-btn">
+                                        <svg width="30" height="30" viewBox="0 0 30 30" fill="black" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M3.58983 14.4979C2.24858 10.3104 3.81608 5.52415 8.21233 4.1079C10.5248 3.36165 13.0773 3.80165 14.9998 5.2479C16.8186 3.84165 19.4648 3.36665 21.7748 4.1079C26.1711 5.52415 27.7486 10.3104 26.4086 14.4979C24.3211 21.1354 14.9998 26.2479 14.9998 26.2479C14.9998 26.2479 5.74733 21.2129 3.58983 14.4979Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <path d="M20 8.375C21.3375 8.8075 22.2825 10.0013 22.3962 11.4025" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>   
+                                    </div>
+                                </div>
+                            </div>
+                            </a>
+                        </div>
+
+                        <div class="catalog__block">
+                            <a href="servicesDetailPage.html" class="link">
+                            <img src="../images/skeleton1.png" alt="T-Shirt">
+                            <div class="block__info">
+                                <span class="block__info-name">Название</span>
+                                <div class="block__info-grade">Оценка: 5/5</div>
+                                <div class="block__info-bottom">
+                                    <span class="block__info-price">500$</span>
+                                    <div class="favorites-btn">
+                                        <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M3.58983 14.4979C2.24858 10.3104 3.81608 5.52415 8.21233 4.1079C10.5248 3.36165 13.0773 3.80165 14.9998 5.2479C16.8186 3.84165 19.4648 3.36665 21.7748 4.1079C26.1711 5.52415 27.7486 10.3104 26.4086 14.4979C24.3211 21.1354 14.9998 26.2479 14.9998 26.2479C14.9998 26.2479 5.74733 21.2129 3.58983 14.4979Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <path d="M20 8.375C21.3375 8.8075 22.2825 10.0013 22.3962 11.4025" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>   
+                                    </div>
+                                </div>
+                            </div>
+                            </a>
+                        </div>
+
+                        <div class="catalog__block">
+                            <a href="servicesDetailPage.html" class="link">
+                            <img src="../images/skeleton1.png" alt="T-Shirt">
+                            <div class="block__info">
+                                <span class="block__info-name">Название</span>
+                                <div class="block__info-grade">Оценка: 5/5</div>
+                                <div class="block__info-bottom">
+                                    <span class="block__info-price">500$</span>
+                                    <div class="favorites-btn">
+                                        <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M3.58983 14.4979C2.24858 10.3104 3.81608 5.52415 8.21233 4.1079C10.5248 3.36165 13.0773 3.80165 14.9998 5.2479C16.8186 3.84165 19.4648 3.36665 21.7748 4.1079C26.1711 5.52415 27.7486 10.3104 26.4086 14.4979C24.3211 21.1354 14.9998 26.2479 14.9998 26.2479C14.9998 26.2479 5.74733 21.2129 3.58983 14.4979Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <path d="M20 8.375C21.3375 8.8075 22.2825 10.0013 22.3962 11.4025" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>   
+                                    </div>
+                                </div>
+                            </div>
+                            </a>
+                        </div>
+
+                        <div class="catalog__block">
+                            <a href="servicesDetailPage.html" class="link">
+                            <img src="../images/skeleton1.png" alt="T-Shirt">
+                            <div class="block__info">
+                                <span class="block__info-name">Название</span>
+                                <div class="block__info-grade">Оценка: 5/5</div>
+                                <div class="block__info-bottom">
+                                    <span class="block__info-price">500$</span>
+                                    <div class="favorites-btn">
+                                        <svg width="30" height="30" viewBox="0 0 30 30" fill="black" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M3.58983 14.4979C2.24858 10.3104 3.81608 5.52415 8.21233 4.1079C10.5248 3.36165 13.0773 3.80165 14.9998 5.2479C16.8186 3.84165 19.4648 3.36665 21.7748 4.1079C26.1711 5.52415 27.7486 10.3104 26.4086 14.4979C24.3211 21.1354 14.9998 26.2479 14.9998 26.2479C14.9998 26.2479 5.74733 21.2129 3.58983 14.4979Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <path d="M20 8.375C21.3375 8.8075 22.2825 10.0013 22.3962 11.4025" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>   
+                                    </div>
+                                </div>
+                            </div>
+                            </a>
+                        </div>
+
+                        <div class="catalog__block">
+                            <a href="servicesDetailPage.html" class="link">
+                            <img src="../images/skeleton1.png" alt="T-Shirt">
+                            <div class="block__info">
+                                <span class="block__info-name">Название</span>
+                                <div class="block__info-grade">Оценка: 5/5</div>
+                                <div class="block__info-bottom">
+                                    <span class="block__info-price">500$</span>
+                                    <div class="favorites-btn">
+                                        <svg width="30" height="30" viewBox="0 0 30 30" fill="black" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M3.58983 14.4979C2.24858 10.3104 3.81608 5.52415 8.21233 4.1079C10.5248 3.36165 13.0773 3.80165 14.9998 5.2479C16.8186 3.84165 19.4648 3.36665 21.7748 4.1079C26.1711 5.52415 27.7486 10.3104 26.4086 14.4979C24.3211 21.1354 14.9998 26.2479 14.9998 26.2479C14.9998 26.2479 5.74733 21.2129 3.58983 14.4979Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <path d="M20 8.375C21.3375 8.8075 22.2825 10.0013 22.3962 11.4025" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>   
+                                    </div>
+                                </div>
+                            </div>
+                            </a>
+                        </div>
+
+                        <div class="catalog__block">
+                            <a href="servicesDetailPage.html" class="link">
+                            <img src="../images/skeleton1.png" alt="T-Shirt">
+                            <div class="block__info">
+                                <span class="block__info-name">Название</span>
+                                <div class="block__info-grade">Оценка: 5/5</div>
+                                <div class="block__info-bottom">
+                                    <span class="block__info-price">500$</span>
+                                    <div class="favorites-btn">
+                                        <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M3.58983 14.4979C2.24858 10.3104 3.81608 5.52415 8.21233 4.1079C10.5248 3.36165 13.0773 3.80165 14.9998 5.2479C16.8186 3.84165 19.4648 3.36665 21.7748 4.1079C26.1711 5.52415 27.7486 10.3104 26.4086 14.4979C24.3211 21.1354 14.9998 26.2479 14.9998 26.2479C14.9998 26.2479 5.74733 21.2129 3.58983 14.4979Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <path d="M20 8.375C21.3375 8.8075 22.2825 10.0013 22.3962 11.4025" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>   
+                                    </div>
+                                </div>
+                            </div>
+                            </a>
+                        </div>
+
+                        <div class="catalog__block">
+                            <a href="servicesDetailPage.html" class="link">
+                            <img src="../images/skeleton1.png" alt="T-Shirt">
+                            <div class="block__info">
+                                <span class="block__info-name">Название</span>
+                                <div class="block__info-grade">Оценка: 5/5</div>
+                                <div class="block__info-bottom">
+                                    <span class="block__info-price">500$</span>
+                                    <div class="favorites-btn">
+                                        <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M3.58983 14.4979C2.24858 10.3104 3.81608 5.52415 8.21233 4.1079C10.5248 3.36165 13.0773 3.80165 14.9998 5.2479C16.8186 3.84165 19.4648 3.36665 21.7748 4.1079C26.1711 5.52415 27.7486 10.3104 26.4086 14.4979C24.3211 21.1354 14.9998 26.2479 14.9998 26.2479C14.9998 26.2479 5.74733 21.2129 3.58983 14.4979Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <path d="M20 8.375C21.3375 8.8075 22.2825 10.0013 22.3962 11.4025" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>   
+                                    </div>
+                                </div>
+                            </div>
+                            </a>
+                        </div>
+
+                        <div class="catalog__block">
+                            <a href="servicesDetailPage.html" class="link">
+                            <img src="../images/skeleton1.png" alt="T-Shirt">
+                            <div class="block__info">
+                                <span class="block__info-name">Название</span>
+                                <div class="block__info-grade">Оценка: 5/5</div>
+                                <div class="block__info-bottom">
+                                    <span class="block__info-price">500$</span>
+                                    <div class="favorites-btn">
+                                        <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M3.58983 14.4979C2.24858 10.3104 3.81608 5.52415 8.21233 4.1079C10.5248 3.36165 13.0773 3.80165 14.9998 5.2479C16.8186 3.84165 19.4648 3.36665 21.7748 4.1079C26.1711 5.52415 27.7486 10.3104 26.4086 14.4979C24.3211 21.1354 14.9998 26.2479 14.9998 26.2479C14.9998 26.2479 5.74733 21.2129 3.58983 14.4979Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <path d="M20 8.375C21.3375 8.8075 22.2825 10.0013 22.3962 11.4025" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>   
+                                    </div>
+                                </div>
+                            </div>
+                            </a>
+                        </div>
+
+                        <div class="catalog__block">
+                            <a href="servicesDetailPage.html" class="link">
+                            <img src="../images/skeleton1.png" alt="T-Shirt">
+                            <div class="block__info">
+                                <span class="block__info-name">Название</span>
+                                <div class="block__info-grade">Оценка: 5/5</div>
+                                <div class="block__info-bottom">
+                                    <span class="block__info-price">500$</span>
+                                    <div class="favorites-btn">
+                                        <svg width="30" height="30" viewBox="0 0 30 30" fill="black" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M3.58983 14.4979C2.24858 10.3104 3.81608 5.52415 8.21233 4.1079C10.5248 3.36165 13.0773 3.80165 14.9998 5.2479C16.8186 3.84165 19.4648 3.36665 21.7748 4.1079C26.1711 5.52415 27.7486 10.3104 26.4086 14.4979C24.3211 21.1354 14.9998 26.2479 14.9998 26.2479C14.9998 26.2479 5.74733 21.2129 3.58983 14.4979Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <path d="M20 8.375C21.3375 8.8075 22.2825 10.0013 22.3962 11.4025" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>   
+                                    </div>
+                                </div>
+                            </div>
+                            </a>
+                        </div>
+        
+                    </div>
+                    <nav class="pagination">
+                    <button class="pagination__button pagination__button--prev">
+                        <svg class="pagination__icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M15.8327 9.99984H4.16602M4.16602 9.99984L9.99935 15.8332M4.16602 9.99984L9.99935 4.1665" stroke="black" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Предыдущий
+                    </button>
+                    
+                    <ul class="pagination__list">
+                        <li class="pagination__item pagination__item--active">1</li>
+                        <li class="pagination__item">2</li>
+                        <li class="pagination__item">3</li>
+                        <li class="pagination__item">...</li>
+                        <li class="pagination__item">9</li>
+                        <li class="pagination__item">10</li>
+                    </ul>
+                    
+                    <button class="pagination__button pagination__button--next">
+                        Следующий
+                        <svg class="pagination__icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M4.16602 9.99984H15.8327M15.8327 9.99984L9.99935 4.1665M15.8327 9.99984L9.99935 15.8332" stroke="black" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                    </nav>
+                </div> 
+                
+            </section>
+            <!-- Настройки -->
+
+            <div style="display: none;" class="account-settings">
+                <h2 class="form-title">Настройки учетной записи</h2>
+                <form method="POST" enctype="multipart/form-data" class="form-container">
+                    {% csrf_token %}
+                
+                    <div class="form-section">
+                        <label for="id_first_name">Имя</label>
+                        {{ form.first_name }}
+                
+                        <label for="id_last_name">Фамилия</label>
+                        {{ form.last_name }}
+                
+                        <label for="id_email">Электронная почта</label>
+                        {{ form.email }}
+
+                        <button type="submit" class="save-btn">Save Changes</button>
+                    </div>
+                
+                    <div class="avatar-section">
+                        <img src="{{ user_profile.profile_picture.url }}" alt="Аватар" class="avatar">
+                        <input type="file" id="id_profile_picture" name="profile_picture" class="hidden-input">
+                        <label for="id_profile_picture" class="avatar-btn">Изменить аватар</label>
+                    </div>
+                
+                    
+                </form>
+            </div>
+    </section>
+
+
+<script src="../scripts/script.js"></script>
+<script>
+    const staticUrl = "{% static 'images/icon/' %}";
+    document.addEventListener("DOMContentLoaded", function () {
+    const menuItems = document.querySelectorAll(".sidebar ul li"); // Все элементы меню
+    const sections = document.querySelectorAll(".content, .ads, .ads-history, .banner-div, .history-block, .account-settings"); // Контентные блоки
+    const iconMappings = {
+        "Панель инструментов": "dashboard",
+        "История": "history",
+        "Избранное": "favourites",
+        "Настройки": "settings"
+    };
+
+    menuItems.forEach((item) => {
+        item.addEventListener("click", function () {
+            // Убираем активный класс у всех пунктов
+            menuItems.forEach((el) => el.classList.remove("active"));
+
+            // Добавляем активный класс к нажатому пункту
+            this.classList.add("active");
+
+            // Сбрасываем все иконки в обычный цвет
+            menuItems.forEach((el) => {
+                const img = el.querySelector("img");
+                if (img) {
+                    Object.values(iconMappings).forEach(iconName => {
+                        if (img.src.includes(`${iconName}black.svg`)) {
+                            img.src = staticUrl + `${iconName}.svg`;
+                        }
+                    });
+                }
+            });
+
+            // Меняем иконку только у активного пункта
+            const icon = this.querySelector("img");
+            const text = this.innerText.trim(); // Получаем текст пункта меню
+
+            if (icon && iconMappings[text]) {
+                icon.src = staticUrl + `${iconMappings[text]}black.svg`; // Делаем активную иконку черной
+            }
+
+            // Скрываем все секции
+            sections.forEach((section) => section.style.display = "none");
+
+            // Определяем, какой раздел показать
+            if (text === "Панель инструментов") {
+                document.querySelector(".profile.content").style.display = "flex";
+                document.querySelector(".banner-div").style.display = "flex";
+                document.querySelector(".ads").style.display = "block";
+            } else if (text === "История") {
+                document.querySelector(".ads-history").style.display = "block";
+            } else if (text === "Избранное") {
+                document.querySelector(".history-block").style.display = "flex";
+            } else if (text === "Настройки") {
+                document.querySelector(".account-settings").style.display = "flex";
+            }
+        });
+    });
+});
+
+document.getElementById("editProfileBtn").addEventListener("click", function (event) {
+        event.preventDefault(); // Предотвращаем переход по ссылке
+
+        // Скрываем основные секции
+        document.querySelector(".profile.content").style.display = "none";
+        document.querySelector(".banner-div").style.display = "none";
+        document.querySelector(".ads").style.display = "none";
+
+        // Показываем секцию настроек профиля
+        document.querySelector(".account-settings").style.display = "flex";
+
+        // Убираем класс 'active' у всех <li>
+        document.querySelectorAll("li").forEach(li => li.classList.remove("active"));
+
+        // Добавляем 'active' на нужный элемент
+        const settingsTab = document.getElementById("settingsTab");
+        settingsTab.classList.add("active");
+
+        // Меняем все иконки на стандартные
+        document.querySelectorAll("li img").forEach(img => {
+            Object.values(iconMappings).forEach(iconName => {
+                if (img.src.includes(`${iconName}black.svg`)) {
+                    img.src = staticUrl + `${iconName}.svg`;
+                }
+            });
+        });
+        const iconMappings = {
+        "Панель инструментов": "dashboard",
+        "История": "history",
+        "Избранное": "favourites",
+        "Настройки": "settings"
+        };
+        // Меняем иконку только у активного пункта
+        const icon = settingsTab.querySelector("img");
+        if (icon && iconMappings["Настройки"]) {
+            icon.src = staticUrl + `${iconMappings["Настройки"]}black.svg`; // Делаем активную иконку черной
+        }
+    });
+</script>
+
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("click", function (event) {
+        if (event.target.classList.contains("pagination-link")) {
+            event.preventDefault();
+            let page = event.target.getAttribute("data-page");
+
+            fetch(`/profile/viewed-history/?page=${page}`, {
+                headers: { "X-Requested-With": "XMLHttpRequest" },
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("history-content").innerHTML = data.html;
+                document.querySelector(".pagination").innerHTML = data.pagination;
+            });
+        }
+    });
+});
+
+
+</script>
+
+
+
+{% endblock %}

@@ -26,52 +26,43 @@
                     <p class="headlines__name">Регистрация</p>
                 </div>
 
-                <form class="form" action="/login" method="POST">
+                <form class="form" method="POST">
+                    {% csrf_token %}
+                
                     <div class="form__input form__input-duo">
-                        <input type="text" id="name" name="name" placeholder="Имя" required>
-                        <input type="text" id="lastName" name="lastName" placeholder="Фамилия" required>
+                        {{ form.first_name }}
+                        {{ form.last_name }}
                     </div>
+                
                     <div class="form__input">
-                        <input type="text" id="gmail" name="gmail" placeholder="Электронная почта" required>
+                        {{ form.email }}
                     </div>
-
+                
                     <div class="form__input">
-                        <input type="phone" id="number" name="number" placeholder="Номер телефона" style="background-image: url('images/icon/number.png');" required>
-                    </div>
-
-                    <div class="form__input">
-                        <input type="password" id="password" name="password" placeholder="Пароль" required>
+                        {{ form.password1 }}
                         <button type="button" class="password-toggle" onclick="toggleBothPasswords(this)">
-                            <img src="{% static 'images/icon/eye-icon.svg' %}" alt="Показать пароль">
+                            
                         </button>
                     </div>
-                    
+                
                     <div class="form__input">
-                        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Подтвердите пароль" required>
+                        {{ form.password2 }}
                         <button type="button" class="password-toggle" onclick="toggleBothPasswords(this)">
-                            <img src="{% static 'images/icon/eye-icon.svg' %}" alt="Показать пароль">
+                            
                         </button>
                     </div>
-
-                    <div class="radio-group">
-                        <label>
-                            <input type="radio" name="userType" id="user" class="radio-btn">
-                            <span>Обычный пользователь</span>
-                        </label>
-                        <label>
-                            <input type="radio" name="userType" id="equipmentProvider" class="radio-btn">
-                            <span>Арендодатель оборудования</span>
-                        </label>
-                        <label>
-                            <input type="radio" name="userType" id="locationProvider" class="radio-btn">
-                            <span>Арендодатель локаций, студий и помещений</span>
-                        </label>
-                    </div>
-
+                
                     <div class="form__button">
-                        <button class="form-btn" type="submit">Вход</button>
+                        <button class="form-btn" type="submit">Регистрация</button>
                     </div>
                 </form>
+                {% if form.errors %}
+                    <div class="form-errors">
+                        {% for field, errors in form.errors.items %}
+                            <p>{{ field }}: {{ errors.0 }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
 
                 <div class="form__description">
                     <p>У вас уже есть аккаунт?<a class="link" href="{% url 'login' %}"> Авторизоваться</a></p>

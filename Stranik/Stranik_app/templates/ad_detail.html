@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{{ ad.title }}</h1>
+    <p><strong>Цена:</strong> ${{ ad.price }}</p>
+    <p><strong>Описание:</strong> {{ ad.description }}</p>
+
+    <a href="{% url 'profile' %}">Назад</a>
+{% endblock %}

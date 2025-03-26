@@ -1,0 +1,10 @@
+{% load static %}
+
+{% for item in viewed_rents %}
+    <tr>
+        <td>{{ item.rent.title }}</td>
+        <td>{{ item.viewed_at|date:"d M, Y H:i" }}</td>
+        <td><b>${{ item.rent.price|default:item.rent.cost_value }}</b></td>
+        <td class="edit"><a style="text-decoration: none; color: #00B207;" href="{% url 'servicesDetailPage' item.rent.id %}">Посмотреть подробности</a></td>
+    </tr>
+{% endfor %}

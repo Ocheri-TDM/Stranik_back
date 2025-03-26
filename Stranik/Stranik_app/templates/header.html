@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="{% static 'styles/aboutUs.css' %}">
     <link rel="stylesheet" href="{% static 'styles/Error.css' %}">
     <link rel="stylesheet" href="{% static 'styles/products.css' %}">
+    <link rel="stylesheet" href="{% static 'styles/profile.css' %}">
     <link rel="stylesheet" href="{% static 'styles/catologdetail.css' %}">
     <link rel="stylesheet" href="{% static 'styles/variables.css' %}">
     <title>STRANIK</title>
@@ -59,7 +60,7 @@
                     </div>
 
                     <div class="nav-btn">
-                        <a class="link" href="{% url 'login' %}">
+                        <a class="link" href="{% if request.user.is_authenticated %}{% url 'profile' %}{% else %}{% url 'login' %}{% endif %}">
                             <img src="{% static 'images/user.png' %}" alt="user-logo">
                         </a>
                     </div>
@@ -79,9 +80,9 @@
                     <a href="{% url 'index' %}" class="footer__logo">STRANIK</a>
                     <p class="footer__description">Лучший выбор для вашего творчества</p>
                     <div class="footer__social">
-                        <a href="404.html" class="footer__social-link"><img src="{% static 'images/twitter.svg' %}" alt="Twitter"></a>
-                        <a href="404.html" class="footer__social-link"><img src="{% static 'images/facebook.svg' %}" alt="Facebook"></a>
-                        <a href="404.html" class="footer__social-link"><img src="{% static 'images/instagram.svg' %}" alt="Instagram"></a>
+                        <a href="{% url '404' %}" class="footer__social-link"><img src="{% static 'images/twitter.svg' %}" alt="Twitter"></a>
+                        <a href="{% url '404' %}" class="footer__social-link"><img src="{% static 'images/facebook.svg' %}" alt="Facebook"></a>
+                        <a href="{% url '404' %}" class="footer__social-link"><img src="{% static 'images/instagram.svg' %}" alt="Instagram"></a>
                     </div>
                 </div>
 
@@ -89,30 +90,30 @@
                     <div class="footer__column">
                         <h3 class="footer__title">КОМПАНИЯ</h3>
                         <ul class="footer__list">
-                            <li class="footer__item"><a href="aboutUs.html" class="footer__link">О нас</a></li>
-                            <li class="footer__item"><a href="404.html" class="footer__link">Функции</a></li>
-                            <li class="footer__item"><a href="404.html" class="footer__link">Работы</a></li>
-                            <li class="footer__item"><a href="404.html" class="footer__link">Карьера</a></li>
+                            <li class="footer__item"><a href="{% url 'about' %}" class="footer__link">О нас</a></li>
+                            <li class="footer__item"><a href="{% url '404' %}" class="footer__link">Функции</a></li>
+                            <li class="footer__item"><a href="{% url '404' %}" class="footer__link">Работы</a></li>
+                            <li class="footer__item"><a href="{% url '404' %}" class="footer__link">Карьера</a></li>
                         </ul>
                     </div>
 
                     <div class="footer__column">
                         <h3 class="footer__title">ПОМОЩЬ</h3>
                         <ul class="footer__list">
-                            <li class="footer__item"><a href="404.html" class="footer__link">Поддержка клиентов</a></li>
-                            <li class="footer__item"><a href="404.html" class="footer__link">Подробности работы</a></li>
-                            <li class="footer__item"><a href="404.html" class="footer__link">Условия и положения</a></li>
-                            <li class="footer__item"><a href="404.html" class="footer__link">Политика конфиденциальности</a></li>
+                            <li class="footer__item"><a href="{% url '404' %}" class="footer__link">Поддержка клиентов</a></li>
+                            <li class="footer__item"><a href="{% url '404' %}" class="footer__link">Подробности работы</a></li>
+                            <li class="footer__item"><a href="{% url '404' %}" class="footer__link">Условия и положения</a></li>
+                            <li class="footer__item"><a href="{% url '404' %}" class="footer__link">Политика конфиденциальности</a></li>
                         </ul>
                     </div>
 
                     <div class="footer__column">
                         <h3 class="footer__title">FAQ</h3>
                         <ul class="footer__list">
-                            <li class="footer__item"><a href="404.html" class="footer__link">Аккаунт</a></li>
-                            <li class="footer__item"><a href="404.html" class="footer__link">Управление</a></li>
-                            <li class="footer__item"><a href="404.html" class="footer__link">Заказы</a></li>
-                            <li class="footer__item"><a href="404.html" class="footer__link">Платежи</a></li>
+                            <li class="footer__item"><a href="{% url 'profile' %}" class="footer__link">Аккаунт</a></li>
+                            <li class="footer__item"><a href="{% url '404' %}" class="footer__link">Управление</a></li>
+                            <li class="footer__item"><a href="{% url '404' %}" class="footer__link">Заказы</a></li>
+                            <li class="footer__item"><a href="{% url '404' %}" class="footer__link">Платежи</a></li>
                         </ul>
                     </div>
 

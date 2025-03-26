@@ -27,18 +27,30 @@
                     <p class="headlines__name">Вход</p>
                 </div>
 
-                <form class="form" action="/login" method="POST">
-                    <div class="form__input">
-                        <input type="text" id="gmail" name="gmail" placeholder="Электронная почта" required>
-                    </div>
+                
 
+                <form class="form" method="POST">
+                    {% csrf_token %}
+                
+                    {% if form.non_field_errors %}
+                        <div class="form__errors">
+                            {% for error in form.non_field_errors %}
+                                <p class="error-message">{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                
                     <div class="form__input">
-                        <input type="password" id="password" name="password" placeholder="Пароль" required>
-                        <button type="button" class="password-toggle" onclick="toggleBothPasswords(this)">
+                        {{ form.email }}
+                    </div>
+                
+                    <div class="form__input">
+                        {{ form.password }}
+                        <button type="button" class="password-toggle" onclick="togglePassword(this)">
                             <img src="{% static 'images/icon/eye-icon.svg' %}" alt="Показать пароль">
                         </button>
                     </div>
-
+                
                     <div class="form__button">
                         <button class="form-btn" type="submit">Вход</button>
                     </div>

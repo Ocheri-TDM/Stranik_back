@@ -1,8 +1,14 @@
 from django.db import models
 from pytils.translit import slugify
 from datetime import datetime
+from django.contrib.auth.models import User
 
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    profile_picture = models.ImageField(upload_to="profile_pics/", default="profile_pics/default.jpg", blank=True, null=True)
 
+    def __str__(self):
+        return self.user.username
 class Category(models.Model):
     name = models.CharField("Название категории", max_length=255)
     slug = models.SlugField(unique=True, editable=False, blank=True)
@@ -52,3 +58,40 @@ class RentImage(models.Model):
     def __str__(self):
         return f"Фото для {self.rent.title}"
 
+
+
+class Ad(models.Model):
+    title = models.CharField(max_length=255)
+    date_posted = models.DateTimeField(auto_now_add=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    status = models.CharField(max_length=20, choices=[
+        ('active', 'Активное'),
+        ('sold', 'Продано'),
+        ('expired', 'Истекло')
+    ])
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ads')
+
+    def __str__(self):
+        return self.title
+
+
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
+
+class ViewedItem(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    viewed_at = models.DateTimeField(auto_now_add=True)
+
+    content_object = GenericForeignKey("content_type", "object_id")
+
+    def viewed_object(self):
+        return self.content_object
+
+class FavoriteAd(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='favorite_ads')
+    ad = models.ForeignKey(Ad, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('user', 'ad')
